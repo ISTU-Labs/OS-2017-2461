@@ -1,0 +1,15 @@
+pyramid
+pyramid_debugtoolbar
+pyramid_chameleon
+requests
+lxml
+
+nose
+elpy
+pyflakes
+jedi
+autopep8
+yapf
+rope
+importmagic
+mock
