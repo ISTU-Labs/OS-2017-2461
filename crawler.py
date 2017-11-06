@@ -55,6 +55,7 @@ class CurrencyStorer(object):
         cur = self.conn.cursor()
         new_cur_list = ((r[0], date, r[1]) for r in cur_list)
         cur.executemany("INSERT INTO rate VALUES (?, ?, ?)", new_cur_list)
+        cur.execute("COMMIT")
 
     def length(self):
         cur = self.conn.cursor()
@@ -69,3 +70,23 @@ class CurrencyStorer(object):
     def _clean(self):
         cur = self.conn.cursor()
         cur.execute("DELETE FROM rate")
+        cur.execute("COMMIT")
+
+
+class Exporter(object):
+    def __init__(self, filename):
+        self.filename = filename
+
+    def export(self, curs):
+        root = etree.Element("root")
+        for code, val in curs:
+            c = etree.SubElement(root, "cur", {"id": str(code)})
+            c.text = "{:.5f}".format(val)
+
+        doc = etree.ElementTree(root)
+        doc.write(self.filename,
+                  pretty_print=True,
+                  xml_declaration=True,
+                  encoding="utf-8")
+
+        return True
