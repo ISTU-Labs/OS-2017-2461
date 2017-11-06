@@ -56,6 +56,16 @@ class CurrencyStorer(object):
         new_cur_list = ((r[0], date, r[1]) for r in cur_list)
         cur.executemany("INSERT INTO rate VALUES (?, ?, ?)", new_cur_list)
 
+    def length(self):
+        cur = self.conn.cursor()
+        answer = cur.execute("""
+             SELECT count(*) as CNT FROM rate
+        """)
+
+        for row in answer:
+            cnt = row[0]
+            return cnt
+
     def _clean(self):
         cur = self.conn.cursor()
         cur.execute("DELETE FROM rate")

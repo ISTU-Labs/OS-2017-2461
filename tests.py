@@ -19,7 +19,9 @@ class TestStorer:
         self.store = CurrencyStorer("teststore.db")
 
     def test_storer(self):
+        assert self.store.length() == 0
         self.store.store(self.cur_list)
+        assert self.store.length() > 0
 
     def tearDown(self):
         self.store._clean()
